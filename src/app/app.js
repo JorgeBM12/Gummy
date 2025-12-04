@@ -1,7 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
-const modelo = require("./modeloTareas");
+const modelo = require("./modeloGummy");
 const vistas = require("./vistas");
 
 const server = http.createServer(function (req, res) {
