@@ -1,0 +1,8 @@
+La organizacion esta planteada asi:
+src sera el tronco principal, mediante el cual se dibide en varias partes
+app va el index y el ejecutable app.js, el modelo y vistas
+Dentro de app hay varias capertas:
+En components estaran los modulos por construir, dentro de ahi tienen que trabajar, como ejemplo ya esta trabajando rodrigo en catalogo
+En assets estaran las imagenes  
+En style estaran los estilos globables para todo el proyecto, es importante que aun no utilicen ningun estilo 
+para al final solo poner un estilo global y evitar codigo conflictivo o codificar de mas.
