@@ -1,5 +1,7 @@
 const http = require("http");
-const modelo = require("./modeloTareas");
+const fs = require("fs");
+const path = require("path");
+const modelo = require("./modeloGummy");
 const vistas = require("./vistas");
 
 const server = http.createServer(function (req, res) {
@@ -9,18 +11,39 @@ const server = http.createServer(function (req, res) {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
 
   // --- GET ---
-  if (metodo === "GET" && url.startsWith("/")) {
-    const urlObj = new URL("http://localhost" + url);
-    const orden = urlObj.searchParams.get("orden") || "porId";
-
-    if (urlObj.pathname === "/") {
-      const tareas = modelo.obtenerTodas();
-      const html = vistas.vistaLista(tareas, orden);
-      res.writeHead(200);
-      res.end(html);
+  if (metodo === "GET") {
+    // ruta raíz: servir index.html (archivo en la raíz del proyecto)
+    if (url === "/" || url === "/index.html") {
+      const filePath = path.join(__dirname, "index.html");
+      fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+          res.writeHead(500);
+          res.end("Error leyendo index.html");
+          return;
+        }
+        res.writeHead(200);
+        res.end(data);
+      });
       return;
     }
 
+    // ruta catálogo: servir src/app/components/catalogo/catalogo.html
+    if (url === "/catalogo" || url === "/components/catalogo/catalogo.html") {
+      const filePath = path.join(__dirname, "components", "catalogo", "catalogo.html");
+      fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+          res.writeHead(500);
+          res.end("Error leyendo catálogo");
+          return;
+        }
+        res.writeHead(200);
+        res.end(data);
+      });
+      return;
+    }
+
+    // mantengo rutas de ejemplo para tareas usando el modelo + vistas si se usan en el futuro
+    const urlObj = new URL("http://localhost" + url);
     if (urlObj.pathname === "/nueva") {
       const html = vistas.vistaFormularioNueva();
       res.writeHead(200);
@@ -79,4 +102,3 @@ const server = http.createServer(function (req, res) {
 });
 
 server.listen(3000, () => console.log("Servidor en http://localhost:3000"));
-//Comentario de prueba
