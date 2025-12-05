@@ -9,7 +9,6 @@ const estrategias = {
           [${g.activa ? "Activo" : "Inactivo"}]
         </li>`).join("")}
     </ul>
-    <a href="/nueva"><button>Agregar nuevo Gummy</button></a>
   `,
   formulario: () => `
     <h1>Nuevo Gummy</h1>
