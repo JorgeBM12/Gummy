@@ -28,19 +28,27 @@ const server = http.createServer(function (req, res) {
     }
 
     // ruta catálogo: servir src/app/components/catalogo/catalogo.html
-    if (url === "/catalogo" || url === "/components/catalogo/catalogo.html") {
-      const filePath = path.join(__dirname, "components", "catalogo", "catalogo.html");
-      fs.readFile(filePath, "utf8", (err, data) => {
-        if (err) {
-          res.writeHead(500);
-          res.end("Error leyendo catálogo");
-          return;
-        }
-        res.writeHead(200);
-        res.end(data);
-      });
+if (url === "/catalogo" || url === "/components/catalogo/catalogo.html") {
+  const filePath = path.join(__dirname, "components", "catalogo", "catalogo.html");
+  fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) {
+      res.writeHead(500);
+      res.end("Error leyendo catálogo");
       return;
     }
+
+    // obtenemos los gummies del modelo
+    const gummies = modelo.obtenerTodos();
+    const listaHTML = vistas.vistaLista(gummies);
+
+    // reemplazamos marcador en el HTML
+    const paginaFinal = data.replace("{{contenido}}", listaHTML);
+
+    res.writeHead(200);
+    res.end(paginaFinal);
+  });
+  return;
+}
 
     // mantengo rutas de ejemplo para tareas usando el modelo + vistas si se usan en el futuro
     const urlObj = new URL("http://localhost" + url);
