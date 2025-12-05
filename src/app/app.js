@@ -12,7 +12,7 @@ const server = http.createServer(function (req, res) {
 
   // --- GET ---
   if (metodo === "GET") {
-    // intento servir archivos estáticos (imágenes, css, js, etc.)
+    // servir archivos estáticos (imágenes, css, js) si existen bajo __dirname
     try {
       const safeUrl = decodeURIComponent(url).replace(/^\/+/, "");
       const requestedPath = path.join(__dirname, safeUrl);
@@ -29,7 +29,7 @@ const server = http.createServer(function (req, res) {
           '.svg': 'image/svg+xml',
           '.css': 'text/css',
           '.js': 'application/javascript',
-          '.html': 'text/html'
+          '.html': 'text/html; charset=utf-8'
         };
         const contentType = mimeTypes[ext] || 'application/octet-stream';
         res.writeHead(200, { 'Content-Type': contentType });
@@ -42,7 +42,7 @@ const server = http.createServer(function (req, res) {
         return;
       }
     } catch (e) {
-      // si algo falla aquí, solo continuamos con las rutas normales
+      // continuar con las rutas normales si algo falla
     }
     // ruta raíz: servir index.html (archivo en la raíz del proyecto)
     if (url === "/" || url === "/index.html") {

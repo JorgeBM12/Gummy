@@ -1,4 +1,4 @@
-La organizacion esta planteada asi:
+git La organizacion esta planteada asi:
 src sera el tronco principal, mediante el cual se dibide en varias partes
 app va el index y el ejecutable app.js, el modelo y vistas
 Dentro de app hay varias capertas:
