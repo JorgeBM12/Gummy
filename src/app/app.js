@@ -95,6 +95,8 @@ const server = http.createServer(function (req, res) {
     });
     return;
   }
+  //cambios
+  
 
   // Si no coincide con nada
   res.writeHead(404);
