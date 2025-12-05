@@ -3,70 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <base href="/components/catalogo/">
+    <script src="catalogo.js" defer></script>
     <title>Catálogo de Dulces</title>
 </head>
 <body>
 	<div style="text-align: center;">
     <h1>Gummy-Bones</h1>
     <h2>Catálogo</h2>
+    <button onclick="verCarrito()" style="position: fixed; top: 20px; right: 20px; padding: 10px 20px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        🛒 Ver Carrito (<span id="cantidadCarrito">0</span>)
+    </button>
 	</div>
 
   <table align="center">
         <!-- FILA 1 -->
         <tr>
             <td>
-                <img src="imagenesCatalogo/gomita1.png" alt="Dulce 1">
+                <img src="imagenesCatalogo/gomita1.png" alt="Dulce 1" onclick="abrirModal(1)" style="cursor: pointer;">
                 <h3>Dulce 1</h3>
                 <p>Descripción</p>
                 <p>$50</p>
-				<button>Agregar al carrito</button>
+				<button onclick="agregarAlCarrito(1)">Agregar al carrito</button>
             </td>
 
             <td>
-                <img src="imagenesCatalogo/gomita2.png" alt="Dulce 2">
+                <img src="imagenesCatalogo/gomita2.png" alt="Dulce 2" onclick="abrirModal(2)" style="cursor: pointer;">
                 <h3>Dulce 2</h3>
                 <p>Descripción</p>
                 <p>$60</p>
-				<button>Agregar al carrito</button>
+				<button onclick="agregarAlCarrito(2)">Agregar al carrito</button>
             </td>
 
             <td>
-                <img src="imagenesCatalogo/gomita3.png" alt="Dulce 3">
+                <img src="imagenesCatalogo/gomita3.png" alt="Dulce 3" onclick="abrirModal(3)" style="cursor: pointer;">
                 <h3>Dulce 3</h3>
                 <p>Descripción</p>
                 <p>$70</p>
-				<button>Agregar al carrito</button>
+				<button onclick="agregarAlCarrito(3)">Agregar al carrito</button>
             </td>
         </tr>
 
         <!-- FILA 2 -->
         <tr>
             <td>
-                <img src="imagenesCatalogo/gomita1.png" alt="Dulce 4">
+                <img src="imagenesCatalogo/gomita1.png" alt="Dulce 4" onclick="abrirModal(4)" style="cursor: pointer;">
                 <h3>Dulce 4</h3>
                 <p>Descripción</p>
                 <p>$55</p>
-				<button>Agregar al carrito</button>
+				<button onclick="agregarAlCarrito(4)">Agregar al carrito</button>
             </td>
 
             <td>
-                <img src="imagenesCatalogo/gomita2.png" alt="Dulce 5">
+                <img src="imagenesCatalogo/gomita2.png" alt="Dulce 5" onclick="abrirModal(5)" style="cursor: pointer;">
                 <h3>Dulce 5</h3>
                 <p>Descripción</p>
                 <p>$40</p>
-				<button>Agregar al carrito</button>
+				<button onclick="agregarAlCarrito(5)">Agregar al carrito</button>
             </td>
 
             <td>
-                <img src="imagenesCatalogo/gomita3.png" alt="Dulce 6">
+                <img src="imagenesCatalogo/gomita3.png" alt="Dulce 6" onclick="abrirModal(6)" style="cursor: pointer;">
                 <h3>Dulce 6</h3>
                 <p>Descripción</p>
                 <p>$45</p>
-				<button>Agregar al carrito</button>
+				<button onclick="agregarAlCarrito(6)">Agregar al carrito</button>
             </td>
         </tr>
     </table>
 
+    <!-- Modal de información del producto -->
+    <div id="miModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000;">
+        <div id="modalContenido" style="background: white; margin: 50px auto; padding: 30px; width: 500px; max-height: 80%; overflow-y: auto; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+            <!-- El contenido se llena dinámicamente -->
+        </div>
+    </div>
 
+    <!-- Modal del Carrito -->
+    <div id="modalCarrito" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000;">
+        <div style="background: white; margin: 50px auto; padding: 20px; width: 600px; max-height: 80%; overflow-y: auto; border-radius: 10px;">
+            <h2>🛒 Tu Carrito</h2>
+            <div id="contenidoCarrito"></div>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #ddd;">
+                <h3>Total: $<span id="totalCarrito">0</span></h3>
+            </div>
+            <button onclick="cerrarCarrito()" style="margin-top: 10px; padding: 10px 20px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+            <button onclick="vaciarCarrito()" style="margin-top: 10px; margin-left: 10px; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">Vaciar Carrito</button>
+        </div>
+    </div>
 </body>
 </html>
