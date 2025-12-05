@@ -1,23 +1,39 @@
-module.exports = {
-  _tareas: [],
-
-  obtenerTodas() {
-    return this._tareas.slice();
-  },
-
-  crear(titulo, descripcion) {
-    if (!titulo) throw new Error('El título es obligatorio');
-    const id = this._tareas.length ? this._tareas[this._tareas.length - 1].id + 1 : 1;
-    const tarea = { id, titulo, descripcion: descripcion || '', completada: false };
-    this._tareas.push(tarea);
-    return tarea;
-  },
-
-  cambiarEstado(id) {
-    const nid = Number(id);
-    const tarea = this._tareas.find(t => t.id === nid);
-    if (!tarea) return false;
-    tarea.completada = !tarea.completada;
-    return true;
+// src/app/modeloGummy.js
+class Gummy {
+  constructor(id, titulo, descripcion) {
+    this.id = id;
+    this.titulo = titulo;
+    this.descripcion = descripcion;
+    this.activa = true;
   }
+
+  cambiarEstado() {
+    this.activa = !this.activa;
+  }
+}
+
+class GummyFactory {
+  static crear(titulo, descripcion) {
+    const id = Date.now().toString();
+    return new Gummy(id, titulo, descripcion);
+  }
+}
+
+// "base de datos" en memoria
+const baseDatos = [];
+
+module.exports = {
+  crear: (titulo, descripcion) => {
+    const nuevo = GummyFactory.crear(titulo, descripcion);
+    baseDatos.push(nuevo);
+  },
+  cambiarEstado: (id) => {
+    const gummy = baseDatos.find(g => g.id === id);
+    if (gummy) {
+      gummy.cambiarEstado();
+      return true;
+    }
+    return false;
+  },
+  obtenerTodos: () => baseDatos
 };
