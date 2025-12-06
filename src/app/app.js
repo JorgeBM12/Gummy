@@ -8,43 +8,56 @@ const server = http.createServer(function (req, res) {
   const url = req.url;
   const metodo = req.method;
 
+  // Por defecto devolvemos HTML utf-8
   res.setHeader("Content-Type", "text/html; charset=utf-8");
 
   // --- GET ---
   if (metodo === "GET") {
-    // servir archivos estáticos (imágenes, css, js) si existen bajo __dirname
+    // servir archivos estáticos (imágenes, css, js) si existen bajo uno de los roots permitidos
     try {
-      const safeUrl = decodeURIComponent(url).replace(/^\/+/, "");
-      const requestedPath = path.join(__dirname, safeUrl);
-      const resolvedPath = path.resolve(requestedPath);
-      const basePath = path.resolve(__dirname);
+      // normalizamos y limpiamos la url
+      const safeUrl = decodeURIComponent(url).replace(/^\/+/, ""); // elimina slashes iniciales
+      // carpetas donde buscamos archivos estáticos (app y su padre - src)
+      const staticRoots = [
+        path.resolve(__dirname),         // Gummy/src/app
+        path.resolve(__dirname, "..")    // Gummy/src
+      ];
 
-      if (resolvedPath.startsWith(basePath) && fs.existsSync(resolvedPath) && fs.statSync(resolvedPath).isFile()) {
-        const ext = path.extname(resolvedPath).toLowerCase();
-        const mimeTypes = {
-          '.png': 'image/png',
-          '.jpg': 'image/jpeg',
-          '.jpeg': 'image/jpeg',
-          '.gif': 'image/gif',
-          '.svg': 'image/svg+xml',
-          '.css': 'text/css',
-          '.js': 'application/javascript',
-          '.html': 'text/html; charset=utf-8'
-        };
-        const contentType = mimeTypes[ext] || 'application/octet-stream';
-        res.writeHead(200, { 'Content-Type': contentType });
-        const stream = fs.createReadStream(resolvedPath);
-        stream.on('error', () => {
-          res.writeHead(500);
-          res.end('Error leyendo archivo');
-        });
-        stream.pipe(res);
-        return;
+      // intentamos resolver la petición en cada root
+      for (const root of staticRoots) {
+        const requestedPath = path.join(root, safeUrl);
+        const resolvedPath = path.resolve(requestedPath);
+
+        // seguridad: asegurarnos que está dentro del root y que existe y es archivo
+        if (resolvedPath.startsWith(root) && fs.existsSync(resolvedPath) && fs.statSync(resolvedPath).isFile()) {
+          const ext = path.extname(resolvedPath).toLowerCase();
+          const mimeTypes = {
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.gif': 'image/gif',
+            '.svg': 'image/svg+xml',
+            '.css': 'text/css',
+            '.js': 'application/javascript',
+            '.html': 'text/html; charset=utf-8'
+          };
+          const contentType = mimeTypes[ext] || 'application/octet-stream';
+          res.writeHead(200, { 'Content-Type': contentType });
+          const stream = fs.createReadStream(resolvedPath);
+          stream.on('error', () => {
+            res.writeHead(500);
+            res.end('Error leyendo archivo');
+          });
+          stream.pipe(res);
+          return;
+        }
       }
     } catch (e) {
-      // continuar con las rutas normales si algo falla
+      // si falla la lógica de archivos estáticos, seguimos con rutas normales
+      // console.error('Error al servir estático:', e);
     }
-    // ruta raíz: servir index.html (archivo en la raíz del proyecto)
+
+    // ruta raíz: servir index.html (archivo en la carpeta app)
     if (url === "/" || url === "/index.html") {
       const filePath = path.join(__dirname, "index.html");
       fs.readFile(filePath, "utf8", (err, data) => {
@@ -60,35 +73,39 @@ const server = http.createServer(function (req, res) {
     }
 
     // ruta catálogo: servir src/app/components/catalogo/catalogo.html
-if (url === "/catalogo" || url === "/components/catalogo/catalogo.html") {
-  const filePath = path.join(__dirname, "components", "catalogo", "catalogo.html");
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if (err) {
-      res.writeHead(500);
-      res.end("Error leyendo catálogo");
+    if (url === "/catalogo" || url === "/components/catalogo/catalogo.html") {
+      const filePath = path.join(__dirname, "components", "catalogo", "catalogo.html");
+      fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+          res.writeHead(500);
+          res.end("Error leyendo catálogo");
+          return;
+        }
+
+        // obtenemos los gummies del modelo
+        const gummies = modelo.obtenerTodos();
+        const listaHTML = vistas.vistaLista(gummies);
+
+        // reemplazamos marcador en el HTML
+        const paginaFinal = data.replace("{{contenido}}", listaHTML);
+
+        res.writeHead(200);
+        res.end(paginaFinal);
+      });
       return;
     }
 
-    // obtenemos los gummies del modelo
-    const gummies = modelo.obtenerTodos();
-    const listaHTML = vistas.vistaLista(gummies);
-
-    // reemplazamos marcador en el HTML
-    const paginaFinal = data.replace("{{contenido}}", listaHTML);
-
-    res.writeHead(200);
-    res.end(paginaFinal);
-  });
-  return;
-}
-
     // mantengo rutas de ejemplo para tareas usando el modelo + vistas si se usan en el futuro
-    const urlObj = new URL("http://localhost" + url);
-    if (urlObj.pathname === "/nueva") {
-      const html = vistas.vistaFormularioNueva();
-      res.writeHead(200);
-      res.end(html);
-      return;
+    try {
+      const urlObj = new URL("http://localhost" + url);
+      if (urlObj.pathname === "/nueva") {
+        const html = vistas.vistaFormularioNueva();
+        res.writeHead(200);
+        res.end(html);
+        return;
+      }
+    } catch (e) {
+      // ignore URL parsing errors
     }
   }
 
@@ -135,8 +152,6 @@ if (url === "/catalogo" || url === "/components/catalogo/catalogo.html") {
     });
     return;
   }
-  //cambios
-  
 
   // Si no coincide con nada
   res.writeHead(404);
