@@ -2,10 +2,10 @@
 const productos = [
     {
         id: 1,
-        nombre: "Dulce 1",
-        descripcion: "Gomitas deliciosas con sabor a fresa, perfectas para cualquier ocasión.",
+        nombre: "Picosillas",
+        descripcion: "Gomitas enchiladas con el toque perfecto de picante y dulce.",
         precio: 50,
-        imagen: "imagenesCatalogo/gomita1.png",
+        imagen: "imagenesCatalogo/gummy_bone_1.png",
         peso: "100g",
         ingredientes: "Azúcar, jarabe de glucosa, gelatina, saborizantes naturales",
         categoria: "Gomitas"
@@ -13,9 +13,9 @@ const productos = [
     {
         id: 2,
         nombre: "Dulce 2",
-        descripcion: "Gomitas ácidas con explosión de sabor cítrico que te encantarán.",
+        descripcion: "Gomitas tropicales sabor a piña, frescura de verano.",
         precio: 60,
-        imagen: "imagenesCatalogo/gomita2.png",
+        imagen: "imagenesCatalogo/gummy_bone_2.png",
         peso: "150g",
         ingredientes: "Azúcar, ácido cítrico, gelatina, colorantes naturales",
         categoria: "Gomitas Ácidas"
@@ -23,9 +23,9 @@ const productos = [
     {
         id: 3,
         nombre: "Dulce 3",
-        descripcion: "Gomitas suaves con forma de ositos, ideales para compartir.",
+        descripcion: "Mix de gomitas con diferentes sabores tropicales.",
         precio: 70,
-        imagen: "imagenesCatalogo/gomita3.png",
+        imagen: "imagenesCatalogo/gummy_bone_3.png",
         peso: "200g",
         ingredientes: "Azúcar, jarabe de maíz, gelatina, sabores naturales",
         categoria: "Gomitas"
@@ -33,9 +33,9 @@ const productos = [
     {
         id: 4,
         nombre: "Dulce 4",
-        descripcion: "Mix de gomitas con diferentes sabores tropicales.",
+        descripcion: "Gomitas clásicas con sabor a cereza, un favorito de siempre.",
         precio: 55,
-        imagen: "imagenesCatalogo/gomita1.png",
+        imagen: "imagenesCatalogo/gummy_bone_4.png",
         peso: "120g",
         ingredientes: "Azúcar, gelatina, saborizantes de frutas tropicales",
         categoria: "Mix"
@@ -43,9 +43,9 @@ const productos = [
     {
         id: 5,
         nombre: "Dulce 5",
-        descripcion: "Gomitas clásicas con sabor a cereza, un favorito de siempre.",
+        descripcion: "Gomitas sabor chicle, por temporada limitada.",
         precio: 40,
-        imagen: "imagenesCatalogo/gomita2.png",
+        imagen: "imagenesCatalogo/gummy_bone_5.png",
         peso: "100g",
         ingredientes: "Azúcar, jarabe de glucosa, gelatina, extracto de cereza",
         categoria: "Gomitas"
@@ -53,9 +53,9 @@ const productos = [
     {
         id: 6,
         nombre: "Dulce 6",
-        descripcion: "Gomitas enchiladas con el toque perfecto de picante y dulce.",
+        descripcion: "Gomitas ácidas con explosión de sabor cítrico que te encantarán.",
         precio: 45,
-        imagen: "imagenesCatalogo/gomita3.png",
+        imagen: "imagenesCatalogo/gummy_bone_6.png",
         peso: "100g",
         ingredientes: "Azúcar, gelatina, chile en polvo, sal, limón",
         categoria: "Gomitas Enchiladas"
@@ -74,6 +74,43 @@ function guardarCarrito() {
 function obtenerProducto(id) {
     return productos.find(p => p.id === id);
 }
+
+// 📌 NUEVA FUNCIÓN: Generar la tabla del catálogo dinámicamente
+function generarCatalogoHTML() {
+    const tablaCatalogo = document.getElementById('tablaCatalogo');
+    if (!tablaCatalogo) return; // Salir si el elemento no existe
+
+    let htmlContent = '';
+    const productosPorFila = 3;
+
+    for (let i = 0; i < productos.length; i++) {
+        const producto = productos[i];
+
+        // Iniciar una nueva fila <tr> cada 3 productos o al principio
+        if (i % productosPorFila === 0) {
+            htmlContent += '<tr>';
+        }
+
+        // Crear la celda <td> para el producto
+        htmlContent += `
+            <td>
+                <img src="${producto.imagen}" alt="${producto.nombre}" onclick="abrirModal(${producto.id})" style="cursor: pointer;" width="350" height="350">
+                <h3>${producto.nombre}</h3>
+                <p>${producto.descripcion}</p>
+                <p><strong>$${producto.precio}</strong></p>
+                <button onclick="agregarAlCarrito(${producto.id})">Agregar al carrito</button>
+            </td>
+        `;
+
+        // Cerrar la fila </tr> cada 3 productos o al final
+        if ((i + 1) % productosPorFila === 0 || i === productos.length - 1) {
+            htmlContent += '</tr>';
+        }
+    }
+
+    tablaCatalogo.innerHTML = htmlContent;
+}
+
 
 // Función para abrir el modal con información del producto
 function abrirModal(idProducto) {
@@ -170,10 +207,13 @@ function actualizarContadorCarrito() {
 function verCarrito() {
     const modalCarrito = document.getElementById("modalCarrito");
     const contenidoCarrito = document.getElementById("contenidoCarrito");
+    const botonComprar = modalCarrito.querySelector('button[onclick="comprarCarrito()"]');
     
     if (carrito.length === 0) {
         contenidoCarrito.innerHTML = "<p style='text-align: center; color: #6c757d;'>Tu carrito está vacío 🛒</p>";
         document.getElementById("totalCarrito").textContent = "0";
+        // Deshabilitar botón de Comprar si el carrito está vacío
+        if (botonComprar) botonComprar.disabled = true;
     } else {
         let html = "";
         let total = 0;
@@ -203,6 +243,8 @@ function verCarrito() {
         
         contenidoCarrito.innerHTML = html;
         document.getElementById("totalCarrito").textContent = total;
+        // Habilitar botón de Comprar
+        if (botonComprar) botonComprar.disabled = false;
     }
     
     modalCarrito.style.display = "block";
@@ -252,6 +294,31 @@ function vaciarCarrito() {
     }
 }
 
+// FUNCIÓN: Comprar Carrito
+function comprarCarrito() {
+    if (carrito.length === 0) {
+        alert("El carrito está vacío. ¡Agrega algunos dulces antes de comprar! 🍬");
+        return;
+    }
+    
+    const total = document.getElementById("totalCarrito").textContent;
+    
+    // 1. Mostrar la alerta de confirmación
+    alert(`🎉 ¡Compra exitosa! 🎉\nTu pedido por un total de $${total} ha sido procesado.\n¡Gracias por tu compra en Gummy-Bones!`);
+    
+    // 2. Vaciar el carrito
+    carrito = [];
+    
+    // 3. Guardar el carrito vacío en LocalStorage
+    guardarCarrito();
+    
+    // 4. Actualizar el contador y cerrar el modal
+    actualizarContadorCarrito();
+    cerrarCarrito();
+    
+    console.log("El carrito ha sido comprado y vaciado.");
+}
+
 // Cerrar modales al hacer clic fuera
 window.onclick = function(event) {
     const modal = document.getElementById("miModal");
@@ -265,9 +332,10 @@ window.onclick = function(event) {
     }
 }
 
-// Actualizar contador cuando carga la página
+// Actualizar contador y GENERAR el catálogo cuando carga la página
 document.addEventListener('DOMContentLoaded', function() {
     actualizarContadorCarrito();
+    generarCatalogoHTML(); // 👈 Llamada a la nueva función
     console.log("Carrito cargado desde LocalStorage:", carrito);
     console.log("Productos disponibles:", productos);
 });
