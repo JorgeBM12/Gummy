@@ -2,40 +2,52 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <base href="/components/catalogo/">
-    <script src="catalogo.js" defer></script>
-    <title>Catálogo de Dulces</title>
+    <base href="/components/catalogo/"> 
+    <title>Catálogo Gummy-Bones (MVC)</title>
+    <style>
+        /* Estilos básicos, ya luego lo tuneamos */
+        body { font-family: sans-serif; background-color: #f8f9fa; }
+        .btn { cursor: pointer; border: none; border-radius: 5px; color: white; padding: 10px 15px; }
+        .btn-green { background: #28a745; }
+        .btn-red { background: #dc3545; }
+        .btn-blue { background: #007bff; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; }
+        .modal-content { background: white; margin: 50px auto; padding: 20px; width: 600px; max-height: 80%; overflow-y: auto; border-radius: 10px; position: relative; }
+        .close-btn { float: right; cursor: pointer; font-size: 20px; font-weight: bold; }
+    </style>
 </head>
 <body>
+
     <div style="text-align: center;">
-    <h1>Gummy-Bones</h1>
-    <h2>Catálogo</h2>
-    <button onclick="verCarrito()" style="position: fixed; top: 20px; right: 20px; padding: 10px 20px; background: #ff0404; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        🛒 Ver Carrito (<span id="cantidadCarrito">0</span>)
-    </button>
+        <h1>Gummy-Bones</h1>
+        <h2>Catálogo</h2>
+        <button onclick="app.verCarrito()" style="position: fixed; top: 20px; right: 20px; padding: 10px 20px; background: #ff0404; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            🛒 Ver Carrito (<span id="cantidadCarrito">0</span>)
+        </button>
     </div>
 
-    <table align="center" id="tablaCatalogo">
-        </table>
+    <table align="center" id="tablaCatalogo"></table>
 
-    <div id="miModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000;">
-        <div id="modalContenido" style="background: white; margin: 50px auto; padding: 30px; width: 500px; max-height: 80%; overflow-y: auto; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-            </div>
+    <div id="miModal" class="modal">
+        <div id="modalContenido" class="modal-content"></div>
     </div>
 
-    <div id="modalCarrito" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000;">
-        <div style="background: white; margin: 50px auto; padding: 20px; width: 600px; max-height: 80%; overflow-y: auto; border-radius: 10px;">
+    <div id="modalCarrito" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="app.cerrarCarrito()">&times;</span>
             <h2>🛒 Tu Carrito</h2>
             <div id="contenidoCarrito"></div>
             <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #ddd;">
                 <h3>Total: $<span id="totalCarrito">0</span></h3>
             </div>
-            <button onclick="comprarCarrito()" style="margin-top: 10px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">
-                Comprar Carrito ✅
-            </button>
-            <button onclick="cerrarCarrito()" style="margin-top: 10px; padding: 10px 20px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
-            <button onclick="vaciarCarrito()" style="margin-top: 10px; margin-left: 10px; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">Vaciar Carrito</button>
+            <div style="margin-top: 15px;">
+                <button onclick="app.comprarCarrito()" class="btn btn-green">Comprar Carrito ✅</button>
+                <button onclick="app.vaciarCarrito()" class="btn btn-red">Vaciar</button>
+                <button onclick="app.cerrarCarrito()" class="btn btn-blue">Cerrar</button>
+            </div>
         </div>
     </div>
+
+    <script src="catalogo.js" defer></script>
 </body>
 </html>
