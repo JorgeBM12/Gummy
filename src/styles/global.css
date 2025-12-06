@@ -80,6 +80,12 @@ h1, h2, h3 {
   justify-content: center;
   align-items: center;
   gap: 0;
+  background: linear-gradient(
+    to bottom,
+    #d9bfa6,
+    #f0e3d4,
+    #ffffff
+  );
 }
 
 .index-container h1 {
