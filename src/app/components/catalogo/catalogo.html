@@ -2,71 +2,52 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <base href="/components/catalogo/">
-    <title>Catálogo de Dulces</title>
+    <base href="/components/catalogo/"> 
+    <title>Catálogo Gummy-Bones (MVC)</title>
+    <style>
+        /* Estilos básicos, ya luego lo tuneamos */
+        body { font-family: sans-serif; background-color: #f8f9fa; }
+        .btn { cursor: pointer; border: none; border-radius: 5px; color: white; padding: 10px 15px; }
+        .btn-green { background: #28a745; }
+        .btn-red { background: #dc3545; }
+        .btn-blue { background: #007bff; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; }
+        .modal-content { background: white; margin: 50px auto; padding: 20px; width: 600px; max-height: 80%; overflow-y: auto; border-radius: 10px; position: relative; }
+        .close-btn { float: right; cursor: pointer; font-size: 20px; font-weight: bold; }
+    </style>
 </head>
 <body>
-	<div style="text-align: center;">
-    <h1>Gummy-Bones</h1>
-    <h2>Catálogo</h2>
-	</div>
 
-  <table align="center">
-        <!-- FILA 1 -->
-        <tr>
-            <td>
-                <img src="imagenesCatalogo/gomita1.png" alt="Dulce 1">
-                <h3>Dulce 1</h3>
-                <p>Descripción</p>
-                <p>$50</p>
-				<button>Agregar al carrito</button>
-            </td>
+    <div style="text-align: center;">
+        <h1>Gummy-Bones</h1>
+        <h2>Catálogo</h2>
+        <button onclick="app.verCarrito()" style="position: fixed; top: 20px; right: 20px; padding: 10px 20px; background: #ff0404; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            🛒 Ver Carrito (<span id="cantidadCarrito">0</span>)
+        </button>
+    </div>
 
-            <td>
-                <img src="imagenesCatalogo/gomita2.png" alt="Dulce 2">
-                <h3>Dulce 2</h3>
-                <p>Descripción</p>
-                <p>$60</p>
-				<button>Agregar al carrito</button>
-            </td>
+    <table align="center" id="tablaCatalogo"></table>
 
-            <td>
-                <img src="imagenesCatalogo/gomita3.png" alt="Dulce 3">
-                <h3>Dulce 3</h3>
-                <p>Descripción</p>
-                <p>$70</p>
-				<button>Agregar al carrito</button>
-            </td>
-        </tr>
+    <div id="miModal" class="modal">
+        <div id="modalContenido" class="modal-content"></div>
+    </div>
 
-        <!-- FILA 2 -->
-        <tr>
-            <td>
-                <img src="imagenesCatalogo/gomita1.png" alt="Dulce 4">
-                <h3>Dulce 4</h3>
-                <p>Descripción</p>
-                <p>$55</p>
-				<button>Agregar al carrito</button>
-            </td>
+    <div id="modalCarrito" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="app.cerrarCarrito()">&times;</span>
+            <h2>🛒 Tu Carrito</h2>
+            <div id="contenidoCarrito"></div>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #ddd;">
+                <h3>Total: $<span id="totalCarrito">0</span></h3>
+            </div>
+            <div style="margin-top: 15px;">
+                <button onclick="app.comprarCarrito()" class="btn btn-green">Comprar Carrito ✅</button>
+                <button onclick="app.vaciarCarrito()" class="btn btn-red">Vaciar</button>
+                <button onclick="app.cerrarCarrito()" class="btn btn-blue">Cerrar</button>
+            </div>
+        </div>
+    </div>
 
-            <td>
-                <img src="imagenesCatalogo/gomita2.png" alt="Dulce 5">
-                <h3>Dulce 5</h3>
-                <p>Descripción</p>
-                <p>$40</p>
-				<button>Agregar al carrito</button>
-            </td>
-
-            <td>
-                <img src="imagenesCatalogo/gomita3.png" alt="Dulce 6">
-                <h3>Dulce 6</h3>
-                <p>Descripción</p>
-                <p>$45</p>
-				<button>Agregar al carrito</button>
-            </td>
-        </tr>
-    </table>
-
-
+    <script src="catalogo.js" defer></script>
 </body>
 </html>
