@@ -95,18 +95,28 @@ const server = http.createServer(function (req, res) {
       return;
     }
 
-    // mantengo rutas de ejemplo para tareas usando el modelo + vistas si se usan en el futuro
-    try {
-      const urlObj = new URL("http://localhost" + url);
-      if (urlObj.pathname === "/nueva") {
-        const html = vistas.vistaFormularioNueva();
-        res.writeHead(200);
-        res.end(html);
-        return;
-      }
-    } catch (e) {
-      // ignore URL parsing errors
+    // ruta nueva: servir src/app/components/nueva/nueva.html
+if (url === "/nueva" || url === "/components/nueva/nueva.html") {
+  const filePath = path.join(__dirname, "components", "nueva", "nueva.html");
+  fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) {
+      res.writeHead(500);
+      res.end("Error leyendo nueva.html");
+      return;
     }
+
+    // obtenemos el formulario desde vistas.js
+    const formulario = vistas.vistaFormularioNueva();
+
+    // reemplaze marcador en el HTML
+    const paginaFinal = data.replace("{{contenido}}", formulario);
+
+    res.writeHead(200);
+    res.end(paginaFinal);
+  });
+  return;
+}
+
   }
 
   // --- POST /guardar ---
@@ -122,7 +132,7 @@ const server = http.createServer(function (req, res) {
 
       try {
         modelo.crear(titulo, descripcion);
-        res.writeHead(302, { Location: "/" });
+        res.writeHead(302, { Location: "/catalogo" });
         res.end();
       } catch (err) {
         res.writeHead(400);
@@ -143,7 +153,7 @@ const server = http.createServer(function (req, res) {
       const id = params.get("id");
 
       if (modelo.cambiarEstado(id)) {
-        res.writeHead(302, { Location: "/" }); // redirige a la lista
+        res.writeHead(302, { Location: "/catalogo" });
         res.end();
       } else {
         res.writeHead(400);
