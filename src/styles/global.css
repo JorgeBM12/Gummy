@@ -14,27 +14,50 @@
 
 /* Reset / base */
 * { box-sizing: border-box; }
-html,body{ height:100%; margin:0; padding:0; }
-body{
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0; 
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  background: var(--bg);
+  background: #ffffff;
   color: var(--text);
   line-height: 1.4;
-  -webkit-font-smoothing:antialiased;
-    background: linear-gradient(
-      to bottom,
-    #d9bfa6,    /* Café claro más fuerte */
-    #f0e3d4,   /* Beige más marcado */
-    #ffffff   /* Blanco */
-  );
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
 h1, h2, h3 {
   font-family: "Fredoka One", sans-serif;
-  color: #c26a3b; /* café dulce */
+  color: #c26a3b;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
   letter-spacing: 1px;
 }
-/* Buttons – now works for ALL cases */
+
+/* LAYOUT PRINCIPAL */
+
+.content-wrapper {
+  flex: 1;
+  padding-bottom: 40px;
+  background: linear-gradient(
+    to bottom,
+    #d9bfa6,
+    #f0e3d4,
+    #ffffff
+  );
+}
+
+.header {
+  text-align: center;
+}
+
+/* BUTTONS */
+
 button, 
 .btn, 
 a button,
@@ -48,24 +71,25 @@ a .btn {
   text-decoration: none;
   background: var(--primary);
   color: #fff;
-  transition: background .15s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-verde {
-    background-color: #28a745; /* Verde */
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-.btn-verde:hover {
-    background-color: #218838; /* Verde más oscuro */
+  background-color: #28a745;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
-/* Variantes */
+.btn-verde:hover {
+  background-color: #218838;
+}
+
+/* Variantes de botones */
 .btn-danger,
 button.btn-danger {
   background: var(--danger) !important;
@@ -81,26 +105,177 @@ button.btn-secondary {
   background: var(--muted) !important;
 }
 
-/* Hover */
+.btn-green { 
+  background: #28a745; 
+}
+
+.btn-red { 
+  background: #dc3545; 
+}
+
+.btn-blue { 
+  background: #007bff; 
+}
+
+/* Hover y estados */
 button:hover,
 .btn:hover {
   filter: brightness(0.9);
+  transform: translateY(-2px);
 }
 
-/* Focus */
 button:focus,
 .btn:focus {
   outline: 3px solid rgba(0,123,255,0.16);
 }
 
-/* Disabled */
 button[disabled],
 .btn[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Estilo general para inputs */
+/* Botón volver */
+.btn-volver-container {
+  text-align: center;
+  margin: 40px 0 20px 0;
+}
+
+/* Botón carrito fijo */
+.btn-carrito-fijo {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+.btn-carrito-fijo:hover {
+  background: #c82333;
+  transform: scale(1.05);
+}
+
+/* TABLA DE PRODUCTOS */
+
+table {
+  border-collapse: separate;
+  border-spacing: 15px;
+  margin: 0 auto;
+}
+
+table td {
+  padding: 20px;
+  text-align: center;
+  background: white;
+  border: 4px solid white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+table td:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+}
+
+table td img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+table td img:hover {
+  transform: scale(1.05);
+}
+
+table td h3 {
+  margin: 15px 0 10px 0;
+}
+
+table td p {
+  color: #666;
+  margin: 8px 0;
+}
+
+table td .precio {
+  color: #28a745;
+  font-weight: bold;
+  font-size: 1.3em;
+  margin: 10px 0;
+}
+
+table th {
+  border: none !important;
+}
+
+/* MODALES */
+
+.modal { 
+  display: none; 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0,0,0,0.7); 
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.modal-content { 
+  background: white; 
+  margin: 50px auto; 
+  padding: 30px; 
+  width: 90%;
+  max-width: 600px;
+  max-height: 80%; 
+  overflow-y: auto; 
+  border-radius: 15px; 
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.close-btn { 
+  float: right; 
+  cursor: pointer; 
+  font-size: 28px; 
+  font-weight: bold;
+  color: #999;
+  line-height: 20px;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: #dc3545;
+}
+
+/* Contenido del carrito */
+#contenidoCarrito > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+#contenidoCarrito img {
+  margin-right: 15px;
+  border-radius: 8px;
+}
+
+/* INPUTS Y FORMS */
+
 input {
   width: 100%;
   padding: 10px;
@@ -112,10 +287,9 @@ input {
 }
 
 input:focus {
-  border-color: #ff4d4d; /* Rojo tipo tu botón danger */
+  border-color: #ff4d4d;
 }
 
-/* Estilo general para textarea */
 textarea {
   width: 100%;
   padding: 10px;
@@ -123,18 +297,26 @@ textarea {
   border: 2px solid #ccc;
   border-radius: 6px;
   font-size: 16px;
-  resize: vertical; /* Permite redimensionar solo hacia abajo */
+  resize: vertical;
   outline: none;
 }
 
 textarea:focus {
   border-color: #ff4d4d;
 }
-table {
-  border-collapse: collapse;
+
+/* FOOTER */
+
+.footer {
+  background: #c26a3b;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: auto;
+  width: 100%;
+  box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
 }
 
-table td, table th {
-  border: none !important;
+.footer p {
+  margin: 5px 0;
 }
-
