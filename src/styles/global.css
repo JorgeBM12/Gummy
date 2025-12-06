@@ -1,4 +1,7 @@
+/* ========================================== */
 /* Global styles for Gummy project */
+/* ========================================== */
+
 :root {
   --bg: #f7f8fa;
   --card: #ffffff;
@@ -12,8 +15,13 @@
   --max-width: 1100px;
 }
 
-/* Reset / base */
-* { box-sizing: border-box; }
+/* ========================================== */
+/* RESET / BASE */
+/* ========================================== */
+
+* { 
+  box-sizing: border-box; 
+}
 
 html, body { 
   height: 100%; 
@@ -39,7 +47,9 @@ h1, h2, h3 {
   letter-spacing: 1px;
 }
 
-/* LAYOUT PRINCIPAL */
+/* ========================================== */
+/* LAYOUT PRINCIPAL (CATÁLOGO) */
+/* ========================================== */
 
 .content-wrapper {
   flex: 1;
@@ -54,9 +64,63 @@ h1, h2, h3 {
 
 .header {
   text-align: center;
+  padding: 20px 0;
 }
 
-/* BUTTONS */
+/* ========================================== */
+/* ESTILOS PARA INDEX.HTML */
+/* ========================================== */
+
+.index-container {
+  text-align: center;
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.index-container h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.index-container h3 {
+  font-size: 1.3em;
+  color: #666;
+  font-weight: normal;
+  margin-bottom: 40px;
+}
+
+.index-buttons {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.index-buttons a {
+  text-decoration: none;
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.index-buttons button {
+  min-width: 220px;
+  padding: 15px 25px;
+  font-size: 16px;
+  display: inline-block;
+}
+
+/* ========================================== */
+/* BUTTONS - ESTILOS GENERALES */
+/* ========================================== */
 
 button, 
 .btn, 
@@ -74,22 +138,20 @@ a .btn {
   transition: all 0.3s ease;
 }
 
-.btn-verde {
-  background-color: #28a745;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
+/* Variantes de color */
+.btn-verde,
+.btn-green { 
+  background: #28a745 !important;
 }
 
-.btn-verde:hover {
-  background-color: #218838;
+.btn-red { 
+  background: #dc3545 !important;
 }
 
-/* Variantes de botones */
+.btn-blue { 
+  background: #007bff !important;
+}
+
 .btn-danger,
 button.btn-danger {
   background: var(--danger) !important;
@@ -105,23 +167,14 @@ button.btn-secondary {
   background: var(--muted) !important;
 }
 
-.btn-green { 
-  background: #28a745; 
-}
-
-.btn-red { 
-  background: #dc3545; 
-}
-
-.btn-blue { 
-  background: #007bff; 
-}
-
-/* Hover y estados */
+/* Estados de botones */
 button:hover,
-.btn:hover {
+.btn:hover,
+.btn-verde:hover,
+.index-buttons button:hover {
   filter: brightness(0.9);
   transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
 button:focus,
@@ -134,6 +187,10 @@ button[disabled],
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* ========================================== */
+/* BOTONES ESPECÍFICOS */
+/* ========================================== */
 
 /* Botón volver */
 .btn-volver-container {
@@ -163,7 +220,9 @@ button[disabled],
   transform: scale(1.05);
 }
 
-/* TABLA DE PRODUCTOS */
+/* ========================================== */
+/* TABLA DE PRODUCTOS (CATÁLOGO) */
+/* ========================================== */
 
 table {
   border-collapse: separate;
@@ -219,7 +278,9 @@ table th {
   border: none !important;
 }
 
+/* ========================================== */
 /* MODALES */
+/* ========================================== */
 
 .modal { 
   display: none; 
@@ -260,7 +321,7 @@ table th {
   color: #dc3545;
 }
 
-/* Contenido del carrito */
+/* Contenido del carrito en modal */
 #contenidoCarrito > div {
   display: flex;
   justify-content: space-between;
@@ -274,7 +335,9 @@ table th {
   border-radius: 8px;
 }
 
+/* ========================================== */
 /* INPUTS Y FORMS */
+/* ========================================== */
 
 input {
   width: 100%;
@@ -284,6 +347,7 @@ input {
   border-radius: 6px;
   font-size: 16px;
   outline: none;
+  transition: border-color 0.3s ease;
 }
 
 input:focus {
@@ -299,13 +363,16 @@ textarea {
   font-size: 16px;
   resize: vertical;
   outline: none;
+  transition: border-color 0.3s ease;
 }
 
 textarea:focus {
   border-color: #ff4d4d;
 }
 
+/* ========================================== */
 /* FOOTER */
+/* ========================================== */
 
 .footer {
   background: #c26a3b;
@@ -319,4 +386,27 @@ textarea:focus {
 
 .footer p {
   margin: 5px 0;
+}
+
+/* ========================================== */
+/* RESPONSIVE */
+/* ========================================== */
+
+/* Pantallas pequeñas: botones del index se apilan */
+@media (max-width: 768px) {
+  .index-buttons {
+    flex-direction: column;
+  }
+  
+  .index-buttons button {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .btn-carrito-fijo {
+    top: 10px;
+    right: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 }
