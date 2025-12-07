@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <base href="/components/nueva/">
   <title>Nuevo Gummy</title>
   <link rel="stylesheet" href="/styles/global.css">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
@@ -14,9 +15,7 @@
     </div>
 
     <!-- Aquí se inyecta el formulario -->
-    <div id="contenido">
-      {{contenido}}
-    </div>
+    <div id="contenido"></div>
 
     <div class="btn-volver-container">
       <a href="/"><button class="btn btn-danger">← Volver al Inicio</button></a>
@@ -27,5 +26,8 @@
   <footer class="footer">
     <p>© 2025 Gummy-Bones. ¡Hecho con mucho dulce! 🍭</p>
   </footer>
+
+  <!-- Cargar el controlador/JS que renderiza el formulario y guarda -->
+  <script src="nueva.js" defer></script>
 </body>
 </html>
