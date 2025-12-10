@@ -74,7 +74,7 @@ class CarritoModel {
 }
 
 // ==========================================
-// 3. VISTA (Manejo del DOM)
+// 3. VISTA
 // ==========================================
 class CatalogoView {
     constructor() {
@@ -197,7 +197,6 @@ class CatalogoController {
         if (producto) {
             this.model.agregarProducto(producto);
             this.view.actualizarContador(this.model.obtenerCantidadTotal());
-            // Feedback simple (podría mejorarse en la vista)
             // alert(`${producto.nombre} agregado!`); 
         }
     }

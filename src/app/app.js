@@ -28,7 +28,7 @@ const server = http.createServer(function (req, res) {
         const requestedPath = path.join(root, safeUrl);
         const resolvedPath = path.resolve(requestedPath);
 
-        // seguridad: asegurarnos que está dentro del root y que existe y es archivo
+        // seguridad: asegurarnos que está dentro del root, que existe y es archivo
         if (resolvedPath.startsWith(root) && fs.existsSync(resolvedPath) && fs.statSync(resolvedPath).isFile()) {
           const ext = path.extname(resolvedPath).toLowerCase();
           const mimeTypes = {
