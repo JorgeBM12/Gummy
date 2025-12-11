@@ -74,7 +74,7 @@ class CarritoModel {
 }
 
 // ==========================================
-// 3. VISTA
+// 3. VISTA (Manejo del DOM)
 // ==========================================
 class CatalogoView {
     constructor() {
@@ -168,58 +168,19 @@ class CatalogoView {
 // ==========================================
 // 4. CONTROLADOR (Coordina Todo)
 // ==========================================
-// ==========================================
-// CONTROLADOR (modificado para cargar productos locales)
-// ==========================================
 class CatalogoController {
     constructor(model, view) {
         this.model = model;
         this.view = view;
-
-        // productos combinados (DB_PRODUCTOS + los guardados en localStorage)
-        this.productos = [];
 
         // Inicializar la aplicación
         this.init();
     }
 
     init() {
-        // Cargar productos guardados en localStorage (clave: 'gummiesNuevos')
-        const localesRaw = JSON.parse(localStorage.getItem('gummiesNuevos')) || [];
-
-        // Normalizar los locales: asegurar campos requeridos, id único y valores correctos
-        const locales = localesRaw.map((p, idx) => {
-            // si ya tuvo id, úsalo; si no, asignamos un id temporal alto para evitar colisiones con DB_PRODUCTOS
-            const id = p.id && Number.isInteger(p.id) ? p.id : (1000 + idx);
-            return {
-                id,
-                nombre: p.nombre || 'Sin nombre',
-                descripcion: p.descripcion || '',
-                precio: Number(p.precio) || 0,
-                imagen: p.imagen || 'imagenesCatalogo/gummy_default.png', // usa una imagen por defecto si no hay
-                peso: p.peso || '',
-                ingredientes: p.ingredientes || '',
-                categoria: p.categoria || 'Personalizado'
-            };
-        });
-
-        // Evitar colisiones: si algún id local coincide con DB_PRODUCTOS, reasignar
-        const dbIds = new Set(DB_PRODUCTOS.map(p => p.id));
-        let nextLocalId = Math.max(...DB_PRODUCTOS.map(p => p.id)) + 1;
-        const localesFinal = locales.map(p => {
-            if (dbIds.has(p.id)) {
-                p.id = nextLocalId++;
-            }
-            return p;
-        });
-
-        // Combinar
-        this.productos = DB_PRODUCTOS.concat(localesFinal);
-
-        // Renderizar en la vista
-        this.view.renderizarCatalogo(this.productos);
-
-        // Actualizar contador inicial usando el modelo (carrito)
+        // Cargar productos en la vista
+        this.view.renderizarCatalogo(DB_PRODUCTOS);
+        // Actualizar contador inicial
         this.view.actualizarContador(this.model.obtenerCantidadTotal());
         
         // Manejo de clicks fuera de los modales (Event Listener Global)
@@ -229,19 +190,20 @@ class CatalogoController {
         };
     }
 
-    // --- Acciones del Usuario (usar this.productos en lugar de DB_PRODUCTOS) ---
+    // --- Acciones del Usuario ---
 
     agregar(idProducto) {
-        const producto = this.productos.find(p => p.id === idProducto);
+        const producto = DB_PRODUCTOS.find(p => p.id === idProducto);
         if (producto) {
             this.model.agregarProducto(producto);
             this.view.actualizarContador(this.model.obtenerCantidadTotal());
+            // Feedback simple (podría mejorarse en la vista)
             // alert(`${producto.nombre} agregado!`); 
         }
     }
 
     verDetalles(idProducto) {
-        const producto = this.productos.find(p => p.id === idProducto);
+        const producto = DB_PRODUCTOS.find(p => p.id === idProducto);
         if (producto) this.view.mostrarModalDetalles(producto);
     }
 
